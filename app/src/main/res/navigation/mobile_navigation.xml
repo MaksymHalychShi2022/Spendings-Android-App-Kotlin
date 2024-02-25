@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_spendings">
+
+    <fragment
+        android:id="@+id/nav_spendings"
+        android:name="com.example.spendings.ui.fragments.SpendingsFragment"
+        android:label="@string/menu_spendings"
+        tools:layout="@layout/fragment_spendings">
+        <action
+            android:id="@+id/action_nav_spendings_to_nav_spending_list"
+            app:destination="@id/nav_spending_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_spending_list"
+        android:name="com.example.spendings.ui.fragments.SpendingListFragment"
+        android:label="@string/menu_spending_list"
+        tools:layout="@layout/fragment_spendings_list" >
+        <argument
+            android:name="timestamp"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_spending"
+        android:name="com.example.spendings.ui.fragments.AddSpendingFragment"
+        android:label="@string/menu_add_spendings"
+        tools:layout="@layout/fragment_add_spending">
+        <action
+            android:id="@+id/action_nav_add_spending_to_nav_spending"
+            app:destination="@id/nav_spendings"
+            app:popUpTo="@id/nav_add_spending"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_products"
+        android:name="com.example.spendings.ui.fragments.ProductsFragment"
+        android:label="@string/menu_products"
+        tools:layout="@layout/fragment_products" />
+</navigation>
