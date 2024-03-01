@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.example.spendings.R
 import com.example.spendings.databinding.ActivityMainBinding
 
@@ -53,5 +54,13 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    fun showProgressBar() {
+        binding.appBarMain.progressBar.isVisible = true;
+    }
+
+    fun hideProgressBar() {
+        binding.appBarMain.progressBar.isVisible = false;
     }
 }

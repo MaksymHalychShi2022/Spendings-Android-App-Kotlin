@@ -10,8 +10,11 @@ object DatabaseClient {
         if (instance == null) {
             instance = Room.databaseBuilder(
                 context.applicationContext,
-                AppDatabase::class.java, "example-database"
-            ).build()
+                AppDatabase::class.java,
+                "example-database"
+            )
+                .addMigrations(AppDatabaseMigrations.MIGRATION_1_2)
+                .build()
         }
         return instance!!
     }

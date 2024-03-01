@@ -1,6 +1,7 @@
 package com.example.spendings.ui
 
 import android.app.Application
+import android.database.sqlite.SQLiteConstraintException
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,8 +10,10 @@ import com.example.spendings.data.DatabaseClient
 import com.example.spendings.data.models.Product
 import com.example.spendings.data.models.Spending
 import com.example.spendings.data.models.SpendingWithProductName
+import com.example.spendings.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class MainViewModel(
     app: Application
@@ -38,8 +41,20 @@ class MainViewModel(
         _spendingList.postValue(emptyList())
     }
 
-    fun createProduct(newProduct: Product) = viewModelScope.launch(Dispatchers.IO) {
-        db.productDao().insert(newProduct)
+    fun createProduct(newProduct: Product): LiveData<Resource<Unit>> {
+        val liveData = MutableLiveData<Resource<Unit>>()
+        viewModelScope.launch(Dispatchers.IO) {
+            liveData.postValue(Resource.Loading())
+            try {
+                db.productDao().insert(newProduct)
+                liveData.postValue(Resource.Success(Unit))
+            } catch (e: SQLiteConstraintException) {
+                liveData.postValue(Resource.Error("Product already exist"))
+            } catch (e: Exception) {
+                liveData.postValue(Resource.Error("Unknown error"))
+            }
+        }
+        return liveData
     }
 
     fun deleteProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
