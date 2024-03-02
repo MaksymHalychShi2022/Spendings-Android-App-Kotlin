@@ -15,21 +15,25 @@ interface SpendingDao {
     @Query("SELECT * FROM spendings")
     fun getAll(): LiveData<List<Spending>>
 
-    @Query("""
-        SELECT s.id, s.productId, p.name AS productName, s.moneySpent, s.timestamp
+    @Query(
+        """
+        SELECT s.id, s.productId, p.name AS productName, s.moneySpent, s.quantity, s.unit, s.timestamp
         FROM spendings s
         INNER JOIN products p ON s.productId = p.id
         WHERE s.timestamp=:timestamp
         ORDER BY s.timestamp DESC
-    """)
+    """
+    )
     fun getSpendingsWithProductNames(timestamp: Long): LiveData<List<SpendingWithProductName>>
 
-    @Query("""
+    @Query(
+        """
         SELECT timestamp, sum(moneySpent) as moneySpent
         FROM spendings
         GROUP BY timestamp
         ORDER BY timestamp DESC
-    """)
+    """
+    )
     fun getSpendingNotes(): LiveData<List<SpendingNote>>
 
     @Insert

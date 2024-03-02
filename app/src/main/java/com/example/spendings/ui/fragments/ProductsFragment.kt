@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,6 +16,7 @@ import com.example.spendings.databinding.FragmentProductsBinding
 import com.example.spendings.ui.MainActivity
 import com.example.spendings.ui.MainViewModel
 import com.example.spendings.utils.Resource
+import com.example.spendings.utils.UnitOfMeasurement
 
 class ProductsFragment : Fragment() {
 
@@ -36,7 +39,8 @@ class ProductsFragment : Fragment() {
             if (productName.isBlank()) {
                 return@setOnClickListener
             }
-            val newProduct = Product(name = productName)
+            val selectedUnit = UnitOfMeasurement.values()[binding.sDefaultUnit.selectedItemPosition]
+            val newProduct = Product(name = productName, defaultUnit = selectedUnit)
             viewModel.createProduct(newProduct).observe(viewLifecycleOwner) { result ->
                 when (result) {
                     is Resource.Success -> {
@@ -56,8 +60,26 @@ class ProductsFragment : Fragment() {
             }
         }
 
+        setupSpinner()
         setupRecyclerView()
         return binding.root
+    }
+
+    private fun setupSpinner() {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, UnitOfMeasurement.values().map { it.unit })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.sDefaultUnit.adapter = adapter
+
+        binding.sDefaultUnit.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedUnit = UnitOfMeasurement.values()[position]
+                // Handle the selection
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Another interface callback
+            }
+        }
     }
 
     private fun setupRecyclerView() {

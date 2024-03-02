@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,15 +35,26 @@ class AddSpendingFragment : Fragment() {
         _binding = FragmentAddSpendingBinding.inflate(inflater, container, false)
 
         binding.btnAdd.setOnClickListener {
-            val newSpending = SpendingWithProductName(
-                id = -1,
-                productName = selectedProduct?.name ?: "null" ,
-                productId = selectedProduct?.id ?: -1 ,
-                moneySpent = binding.etMoneySpent.text.toString().toDouble(),
-                timestamp = System.currentTimeMillis(),
-            )
-            viewModel.addSpending(newSpending)
-            clearInput()
+            val moneySpent = binding.etMoneySpent.text.toString()
+            val quantity = binding.etQuantity.text.toString()
+            if (moneySpent.isBlank() || quantity.isBlank()) {
+                Toast.makeText(context, "Fill the fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            selectedProduct?.let { product ->
+                val newSpending = SpendingWithProductName(
+                    id = -1, // unused, will be generated
+                    productName = product.name,
+                    productId = product.id,
+                    moneySpent = moneySpent.toDouble(),
+                    quantity = quantity.toDouble(),
+                    unit = product.defaultUnit,
+                    timestamp = System.currentTimeMillis(),
+                )
+                viewModel.addSpending(newSpending)
+                clearInput()
+            }
         }
 
         binding.btnSubmit.setOnClickListener {
@@ -52,6 +64,8 @@ class AddSpendingFragment : Fragment() {
                 Spending(
                     productId = it.productId,
                     moneySpent = it.moneySpent,
+                    quantity = it.quantity,
+                    unit = it.unit,
                     timestamp = timestamp
                 )
             }
@@ -67,6 +81,8 @@ class AddSpendingFragment : Fragment() {
 
     private fun clearInput() {
         selectedProduct = null
+        binding.tvUnit.text = "???"
+        binding.etQuantity.text.clear()
         binding.autoCompleteTextView.text.clear()
         binding.etMoneySpent.text.clear()
     }
@@ -88,6 +104,7 @@ class AddSpendingFragment : Fragment() {
 
             val products = viewModel.allProducts.value ?: emptyList()
             selectedProduct = products.find { it.name == selectedName }
+            binding.tvUnit.text = selectedProduct?.defaultUnit?.unit ?: "???"
         }
     }
 
