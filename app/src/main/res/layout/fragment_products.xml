@@ -6,31 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.ProductsFragment">
 
-    <EditText
-        android:id="@+id/etProductName"
-        app:layout_constraintEnd_toStartOf="@+id/btnAdd"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/product_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:id="@+id/sDefaultUnit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/etProductName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAdd"/>
-
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/sDefaultUnit"
-        app:layout_constraintTop_toTopOf="@+id/etProductName" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvNoProducts"
@@ -47,6 +30,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sDefaultUnit" />
+        app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

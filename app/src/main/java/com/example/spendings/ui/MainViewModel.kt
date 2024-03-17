@@ -49,7 +49,7 @@ class MainViewModel(
                 db.productDao().insert(newProduct)
                 liveData.postValue(Resource.Success(Unit))
             } catch (e: SQLiteConstraintException) {
-                liveData.postValue(Resource.Error("Product already exist"))
+                liveData.postValue(Resource.Error("Product with such name already exist"))
             } catch (e: Exception) {
                 liveData.postValue(Resource.Error("Unknown error"))
             }

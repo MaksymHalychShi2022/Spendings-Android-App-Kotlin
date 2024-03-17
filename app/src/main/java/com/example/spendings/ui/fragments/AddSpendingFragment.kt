@@ -104,7 +104,7 @@ class AddSpendingFragment : Fragment() {
 
             val products = viewModel.allProducts.value ?: emptyList()
             selectedProduct = products.find { it.name == selectedName }
-            binding.tvUnit.text = selectedProduct?.defaultUnit?.unit ?: "???"
+            binding.tvUnit.text = selectedProduct?.defaultUnit ?: "???"
         }
     }
 
