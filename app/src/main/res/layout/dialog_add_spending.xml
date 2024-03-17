@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Product Name" />
+
+    <EditText
+        android:id="@+id/etQuantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Quantity"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/etUnitOfMeasurement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Unit Of Measurement" />
+
+    <EditText
+        android:id="@+id/etMoneySpent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Money Spent"
+        android:inputType="numberDecimal" />
+
+</LinearLayout>

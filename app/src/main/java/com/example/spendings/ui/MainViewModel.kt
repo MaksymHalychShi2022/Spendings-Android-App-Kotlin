@@ -64,4 +64,9 @@ class MainViewModel(
     fun deleteSpendingsById(spendingId: Int) = viewModelScope.launch(Dispatchers.IO) {
         db.spendingDao().deleteById(spendingId)
     }
+
+    fun getProductByName(productName: String): Product? {
+        val products = allProducts.value ?: emptyList()
+        return products.find { it.name == productName }
+    }
 }
