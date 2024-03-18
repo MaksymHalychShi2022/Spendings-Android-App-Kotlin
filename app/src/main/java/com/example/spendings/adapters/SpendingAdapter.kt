@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spendings.data.models.SpendingWithProductName
 import com.example.spendings.databinding.ItemSpendingBinding
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class SpendingAdapter : RecyclerView.Adapter<SpendingAdapter.NewViewHolder>(){
 
@@ -43,17 +41,13 @@ class SpendingAdapter : RecyclerView.Adapter<SpendingAdapter.NewViewHolder>(){
     private var onItemClickListener: ((SpendingWithProductName) -> Unit)? = null
 
     override fun onBindViewHolder(holder: NewViewHolder, position: Int) {
-        val current = differ.currentList[position]
+        val item = differ.currentList[position]
         val binding = holder.binding
         holder.itemView.apply {
-            binding.tvProduct.text = current.productName
-            binding.tvMoneySpent.text = current.moneySpent.toString()
-            binding.tvTimestamp.text = SimpleDateFormat("yyyy-MM-dd HH:mm").format(
-                Date(current.timestamp)
-            )
+            binding.tvSpendingInfo.text = item.getInfo()
 
             binding.root.setOnClickListener {
-                onItemClickListener?.let { it(current) }
+                onItemClickListener?.let { it(item) }
             }
         }
     }

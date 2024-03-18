@@ -41,13 +41,13 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.NewViewHolder>(){
     private var onItemClickListener: ((Product) -> Unit)? = null
 
     override fun onBindViewHolder(holder: NewViewHolder, position: Int) {
-        val current = differ.currentList[position]
+        val item = differ.currentList[position]
         val binding = holder.binding
         holder.itemView.apply {
-            binding.tvName.text = current.name
+            binding.tvName.text = item.name
 
             binding.root.setOnClickListener {
-                onItemClickListener?.let { it(current) }
+                onItemClickListener?.let { it(item) }
             }
         }
     }

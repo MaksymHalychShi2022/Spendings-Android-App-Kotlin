@@ -8,5 +8,9 @@ data class SpendingWithProductName(
     val quantity: Double,
     val unit: String,
     val timestamp: Long
-)
+) {
+    fun getInfo(): String {
+        return "$productName/$quantity/$unit/$moneySpent"
+    }
+}
 

@@ -6,14 +6,14 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object DateTimeUtil {
-    fun dateTimeStrToUnixTimestamp(dateTimeStr: String): Long {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+    fun dateTimeStrToUnixTimestamp(dateTimeStr: String, pattern: String = "dd-MM-yyyy HH:mm"): Long {
+        val formatter = DateTimeFormatter.ofPattern(pattern)
         val localDateTime = LocalDateTime.parse(dateTimeStr, formatter)
         return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
-    fun unixTimestampToDateTimeStr(timestamp: Long): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault())
+    fun unixTimestampToDateTimeStr(timestamp: Long, pattern: String = "dd-MM-yyyy HH:mm"): String {
+        val formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault())
         return formatter.format(Instant.ofEpochMilli(timestamp))
     }
 }

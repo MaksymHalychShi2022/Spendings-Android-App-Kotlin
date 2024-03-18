@@ -43,16 +43,13 @@ class SpendingNoteAdapter : RecyclerView.Adapter<SpendingNoteAdapter.NewViewHold
     private var onItemClickListener: ((SpendingNote) -> Unit)? = null
 
     override fun onBindViewHolder(holder: NewViewHolder, position: Int) {
-        val current = differ.currentList[position]
+        val item = differ.currentList[position]
         val binding = holder.binding
         holder.itemView.apply {
-            binding.tvMoneySpent.text = current.moneySpent.toString()
-            binding.tvTimestamp.text = SimpleDateFormat("yyyy-MM-dd HH:mm").format(
-                Date(current.timestamp)
-            )
+            binding.tvSpendingNoteInfo.text = item.getInfo()
 
             binding.root.setOnClickListener {
-                onItemClickListener?.let { it(current) }
+                onItemClickListener?.let { it(item) }
             }
         }
     }
