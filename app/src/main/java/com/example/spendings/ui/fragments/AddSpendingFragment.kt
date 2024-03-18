@@ -14,9 +14,12 @@ import com.example.spendings.adapters.SpendingAdapter
 import com.example.spendings.data.models.Spending
 import com.example.spendings.data.models.SpendingWithProductName
 import com.example.spendings.databinding.DialogAddSpendingBinding
+import com.example.spendings.databinding.DialogSetTimestampBinding
 import com.example.spendings.databinding.FragmentAddSpendingBinding
 import com.example.spendings.ui.MainActivity
 import com.example.spendings.ui.MainViewModel
+import com.example.spendings.utils.DateTimeUtil
+import java.time.format.DateTimeParseException
 
 class AddSpendingFragment : Fragment() {
 
@@ -37,9 +40,13 @@ class AddSpendingFragment : Fragment() {
             showAddDialog()
         }
 
+        binding.btnSetTimestamp.setOnClickListener {
+            showTimestampDialog()
+        }
+
         binding.btnSubmit.setOnClickListener {
             val spendingListWithProductName = viewModel.spendingList.value ?: emptyList()
-            val timestamp = System.currentTimeMillis()
+            val timestamp = viewModel.spendingListTimestamp ?: System.currentTimeMillis()
             val spendingList: List<Spending> = spendingListWithProductName.map {
                 Spending(
                     productId = it.productId,
@@ -56,6 +63,47 @@ class AddSpendingFragment : Fragment() {
 
         setupRecyclerView()
         return binding.root
+    }
+
+    private fun showTimestampDialog() {
+        val bindingDialog = DialogSetTimestampBinding.inflate(layoutInflater)
+
+        val dialog = AlertDialog.Builder(requireContext()).apply {
+            setView(bindingDialog.root)
+            setTitle("Set timestamp")
+            setPositiveButton("OK", null)
+            setNegativeButton("Cancel", null)
+        }.create()
+
+        dialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            if (bindingDialog.checkbox.isChecked) {
+                viewModel.spendingListTimestamp = null
+                dialog.dismiss()
+                return@setOnClickListener
+            }
+            val timestamp = bindingDialog.etTimestamp.text.trim().toString()
+            if (timestamp.isEmpty()) {
+                bindingDialog.etTimestamp.error = "This field cannot be empty"
+                bindingDialog.etTimestamp.requestFocus()
+            } else try {
+                viewModel.spendingListTimestamp =
+                    DateTimeUtil.dateTimeStrToUnixTimestamp(timestamp)
+                dialog.dismiss()
+            } catch (e: DateTimeParseException) {
+                bindingDialog.etTimestamp.error = "Invalid timestamp"
+                bindingDialog.etTimestamp.requestFocus()
+            }
+        }
+
+        bindingDialog.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            bindingDialog.etTimestamp.isEnabled = !isChecked
+        }
+
+        bindingDialog.etTimestamp.setText(DateTimeUtil.unixTimestampToDateTimeStr(
+            viewModel.spendingListTimestamp ?: System.currentTimeMillis()
+        ))
     }
 
     private fun setupAutoCompleteTextView(bindingDialog: DialogAddSpendingBinding) {

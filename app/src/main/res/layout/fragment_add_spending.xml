@@ -11,9 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add"
-        app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
+        app:layout_constraintEnd_toStartOf="@+id/btnSetTimestamp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnSetTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/btnAdd"
+        app:layout_constraintStart_toEndOf="@id/btnAdd"
+        app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
+        android:text="timestamp"/>
 
     <Button
         android:id="@+id/btnSubmit"
@@ -21,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="@string/submit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnAdd"
+        app:layout_constraintStart_toEndOf="@+id/btnSetTimestamp"
         app:layout_constraintTop_toTopOf="@+id/btnAdd" />
 
     <TextView

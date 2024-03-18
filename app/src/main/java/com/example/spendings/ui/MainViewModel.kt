@@ -23,6 +23,7 @@ class MainViewModel(
     private val _spendingMutableList = mutableListOf<SpendingWithProductName>()
     private val _spendingList = MutableLiveData<List<SpendingWithProductName>>()
     val spendingList: LiveData<List<SpendingWithProductName>> = _spendingList
+    var spendingListTimestamp: Long? = null
 
     val allProducts: LiveData<List<Product>> = db.productDao().getAll()
     val allSpendingNotes = db.spendingDao().getSpendingNotes()
@@ -52,6 +53,7 @@ class MainViewModel(
 
     fun clearSpendingList() {
         _spendingList.postValue(emptyList())
+        spendingListTimestamp = null
     }
 
     fun createProduct(newProduct: Product): LiveData<Resource<Unit>> {
