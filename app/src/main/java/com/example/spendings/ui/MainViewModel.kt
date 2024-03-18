@@ -20,6 +20,7 @@ class MainViewModel(
 ) : AndroidViewModel(app) {
     private val db = DatabaseClient.getDatabase(app)
 
+    private val _spendingMutableList = mutableListOf<SpendingWithProductName>()
     private val _spendingList = MutableLiveData<List<SpendingWithProductName>>()
     val spendingList: LiveData<List<SpendingWithProductName>> = _spendingList
 
@@ -28,10 +29,22 @@ class MainViewModel(
 
     fun getSpendings(timestamp: Long) = db.spendingDao().getSpendingsWithProductNames(timestamp)
 
-    fun addSpending(newSpending: SpendingWithProductName) = viewModelScope.launch(Dispatchers.IO) {
-        val currentList = _spendingList.value ?: emptyList()
-        _spendingList.postValue(currentList + newSpending)
-    }
+    fun updateSpendingList(spending: SpendingWithProductName) =
+        viewModelScope.launch(Dispatchers.IO) {
+            val existingIndex =
+                _spendingMutableList.indexOfFirst { it.productId == spending.productId }
+
+            if (existingIndex != -1) {
+                // Item exists, update it
+                _spendingMutableList[existingIndex] = spending
+            } else {
+                // Item does not exist, add it to the list
+                _spendingMutableList.add(spending)
+            }
+
+            // Notify observers of the change
+            _spendingList.postValue(ArrayList(_spendingMutableList))
+        }
 
     fun addSpendingList(spendingList: List<Spending>) = viewModelScope.launch(Dispatchers.IO) {
         db.spendingDao().insertAll(spendingList)

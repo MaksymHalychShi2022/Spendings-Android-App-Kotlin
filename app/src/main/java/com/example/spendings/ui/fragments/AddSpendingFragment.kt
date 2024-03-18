@@ -78,7 +78,7 @@ class AddSpendingFragment : Fragment() {
         }
     }
 
-    private fun showAddDialog() {
+    private fun showAddDialog(spending: SpendingWithProductName? = null) {
         val bindingDialog = DialogAddSpendingBinding.inflate(layoutInflater)
 
         val dialog = AlertDialog.Builder(requireContext()).apply {
@@ -119,12 +119,19 @@ class AddSpendingFragment : Fragment() {
                         moneySpent = moneySpent.toDouble(),
                         quantity = quantity.toDouble(),
                         unit = product.defaultUnit,
-                        timestamp = System.currentTimeMillis(),
+                        timestamp = spending?.timestamp ?: System.currentTimeMillis(),
                     )
-                    viewModel.addSpending(newSpending)
+                    viewModel.updateSpendingList(newSpending)
                     dialog.dismiss()
                 }
             }
+        }
+
+        spending?.let {
+            bindingDialog.autoCompleteTextView.setText(it.productName)
+            bindingDialog.etQuantity.setText(it.quantity.toString())
+            bindingDialog.etUnitOfMeasurement.setText(it.unit)
+            bindingDialog.etMoneySpent.setText(it.moneySpent.toString())
         }
 
         setupAutoCompleteTextView(bindingDialog)
@@ -132,8 +139,9 @@ class AddSpendingFragment : Fragment() {
 
     private fun setupRecyclerView() {
         spendingAdapter = SpendingAdapter()
-//        spendingAdapter.setOnItemClickListener {
-//        }
+        spendingAdapter.setOnItemClickListener {
+            showAddDialog(it)
+        }
         binding.rvSpendings.apply {
             adapter = spendingAdapter
             layoutManager = LinearLayoutManager(activity)
